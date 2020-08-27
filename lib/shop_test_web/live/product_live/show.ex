@@ -9,11 +9,11 @@ defmodule ShopTestWeb.ProductLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
+  def handle_params(%{"id" => slug}, _, socket) do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:product, Products.get_product!(id))}
+     |> assign(:product, Products.get_product_by_slug(slug))}
   end
 
   defp page_title(:show), do: "Show Product"
