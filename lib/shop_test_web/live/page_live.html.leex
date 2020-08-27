@@ -1,0 +1,25 @@
+<section class="container mx-auto py-24 px-4">
+  <div class="w-full md:w-11/12 xl:w-8/12 mx-auto text-left md:text-center">
+    <h1 class="text-4xl md:text-5xl text-gray-900 leading-tight mb-3 font-bold md:font-extrabold">
+      Thank you for using Boilerplate Generator
+    </h1>
+    <p class="text-lg md:text-xl text-gray-600 mb-6">
+      You are now ready to start or continue your journey to greatness.
+    </p>
+
+    <form phx-change="suggest" phx-submit="search">
+      <label class="tag-label">
+        <div class="tag-append">
+          <input class="tag-input" type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
+          <button type="submit" class="btn btn-dark" phx-disable-with="Searching...">Go to Hexdocs</button>
+        </div>
+      </label>
+
+      <datalist id="results">
+        <%= for {app, _vsn} <- @results do %>
+          <option value="<%= app %>"><%= app %></option>
+        <% end %>
+      </datalist>
+    </form>
+  </div>
+</section>
