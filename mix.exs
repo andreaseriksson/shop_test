@@ -37,6 +37,8 @@ defmodule ShopTest.MixProject do
       {:phx_gen_auth, "~> 0.3.0", only: [:dev], runtime: false},
       {:sobelow, "~> 0.8", only: :dev},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:inflex, "~> 2.0.0"},
+      {:faker, "~> 0.14"},
 
       {:phoenix, "~> 1.5.4"},
       {:phoenix_ecto, "~> 4.1"},

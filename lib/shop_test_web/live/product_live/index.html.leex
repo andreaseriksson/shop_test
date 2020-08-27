@@ -1,0 +1,37 @@
+<div class="flex flex-wrap">
+  <div class="w-full md:w-2/3">
+    <div class="card shadow">
+      <div class="card-header">
+        <h5 class="card-title">
+          Listing Products
+        </h5>
+      </div>
+      <div class="card-body prose max-w-full">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Price</th>
+
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="products">
+<%= for product <- @products do %>
+            <tr id="product-<%= product.id %>">
+              <td><%= product.name %></td>
+              <td><%= product.description %></td>
+              <td><%= product.price %></td>
+
+              <td class="text-right">
+                <span><%= live_redirect "Show", to: Routes.product_show_path(@socket, :show, product.slug) %></span>
+              </td>
+            </tr>
+<% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

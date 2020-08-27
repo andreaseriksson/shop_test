@@ -20,6 +20,9 @@ defmodule ShopTestWeb.Router do
   scope "/", ShopTestWeb do
     pipe_through :browser
 
+    live "/products", ProductLive.Index, :index
+    live "/products/:id", ProductLive.Show, :show
+
     live "/", PageLive, :index
   end
 

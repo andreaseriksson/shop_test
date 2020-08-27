@@ -9,3 +9,13 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias ShopTest.Products
+
+Enum.each(1..30, fn _ ->
+  Products.create_product(%{
+    name: Faker.Beer.name,
+    description: "#{Faker.Beer.style} - #{Faker.Beer.brand}",
+    price: (Faker.random_between(200, 1000) / 100.0)
+  })
+end)

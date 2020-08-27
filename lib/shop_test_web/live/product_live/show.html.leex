@@ -1,0 +1,37 @@
+<div class="flex flex-wrap">
+  <div class="w-full md:w-2/3">
+    <div class="card shadow">
+      <div class="card-header">
+        <h5 class="card-title">
+          Show Product
+        </h5>
+      </div>
+      <div class="card-body prose">
+
+        <div>
+          <strong>Name:</strong>
+          <%= @product.name %>
+        </div>
+
+        <div>
+          <strong>Slug:</strong>
+          <%= @product.slug %>
+        </div>
+
+        <div>
+          <strong>Description:</strong>
+          <%= @product.description %>
+        </div>
+
+        <div>
+          <strong>Price:</strong>
+          <%= @product.price %>
+        </div>
+
+      </div>
+      <div class="card-footer">
+        <%= live_redirect "Back", to: Routes.product_index_path(@socket, :index), class: "btn btn-link btn-sm" %>
+      </div>
+    </div>
+  </div>
+</div>
