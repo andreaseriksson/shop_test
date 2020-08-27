@@ -32,7 +32,7 @@ defmodule ShopTestWeb.ProductLiveTest do
     setup [:create_product]
 
     test "displays product", %{conn: conn, product: product} do
-      {:ok, _show_live, html} = live(conn, Routes.product_show_path(conn, :show, product))
+      {:ok, _show_live, html} = live(conn, Routes.product_show_path(conn, :show, product.slug))
 
       assert html =~ "Show Product"
       assert html =~ product.description
