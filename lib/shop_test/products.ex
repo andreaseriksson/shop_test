@@ -22,6 +22,27 @@ defmodule ShopTest.Products do
   end
 
   @doc """
+  Returns the list of products matching fuzzy search.
+
+  ## Examples
+
+      iex> search_products()
+      [%Product{}, ...]
+
+  """
+  def search_products(search_phrase) do
+    start_character = String.slice(search_phrase, 0..1)
+
+    from(
+      p in Product,
+      where: ilike(p.name, ^"#{start_character}%"),
+      where: fragment("SIMILARITY(?, ?) > 0",  p.name, ^search_phrase),
+      order_by: fragment("LEVENSHTEIN(?, ?)", p.name, ^search_phrase)
+    )
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single product.
 
   Raises `Ecto.NoResultsError` if the Product does not exist.

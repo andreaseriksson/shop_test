@@ -1,10 +1,18 @@
 <div class="flex flex-wrap">
   <div class="w-full md:w-2/3">
     <div class="card shadow">
-      <div class="card-header">
+      <div class="card-header md:flex justify-between">
         <h5 class="card-title">
           Listing Products
         </h5>
+        <%= f = form_for @changeset, "#", phx_change: "search", as: "search" %>
+          <%= label f, :search_phrase, class: "tag-label" do %>
+            <div class="tag-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <%= text_input f, :search_phrase, class: "tag-input", phx_debounce: 500, placeholder: "Search product" %>
+            </div>
+          <% end %>
+        </form>
       </div>
       <div class="card-body prose max-w-full">
         <table class="table">
