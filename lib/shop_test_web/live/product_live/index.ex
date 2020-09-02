@@ -9,19 +9,23 @@ defmodule ShopTestWeb.ProductLive.Index do
     {
       :ok,
       socket
-      |> assign(:products, list_products())
       |> assign(:changeset, search_changeset())
     }
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    {
+      :noreply,
+      socket
+      |> assign(:order_and_filter_changeset, order_and_filter_changeset(params))
+      |> assign(:products, list_products(params))
+    }
   end
 
   @impl true
   def handle_event("search", %{"search" => %{"search_phrase" => search_phrase}}, socket) when search_phrase == "" do
-    {:noreply, assign(socket, :products, list_products())}
+    {:noreply, assign(socket, :products, list_products(%{}))}
   end
 
   @impl true
@@ -36,14 +40,23 @@ defmodule ShopTestWeb.ProductLive.Index do
     end
   end
 
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Listing Products")
-    |> assign(:product, nil)
+  def handle_event("order_and_filter", %{"order_and_filter" => order_and_filter_params}, socket) do
+    order_and_filter_params
+    |> order_and_filter_changeset()
+    |> case do
+      %{valid?: true} = changeset ->
+        {
+          :noreply,
+          socket
+          |> push_patch(to: Routes.product_index_path(socket, :index, apply_changes(changeset)))
+        }
+      _ ->
+        {:noreply, socket}
+    end
   end
 
-  defp list_products do
-    Products.list_products()
+  defp list_products(params) do
+    Products.list_products(params)
   end
 
   @types %{search_phrase: :string}
@@ -58,5 +71,13 @@ defmodule ShopTestWeb.ProductLive.Index do
     |> update_change(:search_phrase, &String.trim/1)
     |> validate_length(:search_phrase, min: 2)
     |> validate_format(:search_phrase, ~r/[A-Za-z0-9\ ]/)
+  end
+
+  defp order_and_filter_changeset(attrs \\ %{}) do
+    cast(
+      {%{}, %{order_by: :string}},
+      attrs,
+      [:order_by]
+    )
   end
 end

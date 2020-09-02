@@ -22,18 +22,36 @@
               <th>Description</th>
               <th>Price</th>
 
-              <th></th>
+              <th>
+                <%= f = form_for @order_and_filter_changeset, "#", phx_change: "order_and_filter", as: "order_and_filter" %>
+                  <% options = ["Order by": "", "Name": "name_asc", "Name (Desc)": "name_desc",
+                                "Price": "price_asc", "Price (Desc)": "price_desc"] %>
+                  <%= select f, :order_by, options, class: "tag-select tag-select-sm" %>
+                </form>
+              </th>
             </tr>
           </thead>
           <tbody id="products">
 <%= for product <- @products do %>
             <tr id="product-<%= product.id %>">
-              <td><%= product.name %></td>
-              <td><%= product.description %></td>
+              <td>
+                <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
+                  <%= product.name %>
+                <% end %>
+              </td>
+              <td>
+                <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
+                  <%= product.description %>
+                <% end %>
+              </td>
               <td><%= product.price %></td>
 
               <td class="text-right">
-                <span><%= live_redirect "Show", to: Routes.product_show_path(@socket, :show, product.slug) %></span>
+                <button type="button" class="btn btn-link btn-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </button>
               </td>
             </tr>
 <% end %>

@@ -17,9 +17,23 @@ defmodule ShopTest.Products do
       [%Product{}, ...]
 
   """
-  def list_products do
-    Repo.all(Product)
+  def list_products(params \\ %{}) do
+    from(
+      p in Product,
+      order_by: ^filter_order_by(params["order_by"])
+    )
+    |> Repo.all()
   end
+
+  # defp filter_order_by("name_desc"), do: [desc: dynamic([p], p.name)]
+  # defp filter_order_by("name_asc"), do: [asc: dynamic([p], p.name)]
+  # defp filter_order_by("price_desc"), do: [desc: dynamic([p], p.price)]
+  # defp filter_order_by("price_asc"), do: [asc: dynamic([p], p.price)]
+  defp filter_order_by("name_desc"), do: [desc: :name]
+  defp filter_order_by("name_asc"), do: [asc: :name]
+  defp filter_order_by("price_desc"), do: [desc: :price]
+  defp filter_order_by("price_asc"), do: [asc: :price]
+  defp filter_order_by(_), do: []
 
   @doc """
   Returns the list of products matching fuzzy search.
