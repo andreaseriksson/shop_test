@@ -23,6 +23,8 @@ defmodule ShopTestWeb.Router do
     live "/products", ProductLive.Index, :index
     live "/products/:id", ProductLive.Show, :show
 
+    live "/checkout", CheckoutLive.New, :index
+
     live "/", PageLive, :index
   end
 

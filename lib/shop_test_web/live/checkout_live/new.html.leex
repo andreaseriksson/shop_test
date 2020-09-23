@@ -1,0 +1,51 @@
+<%= if @checkout && @checkout.status == "succeeded" do %>
+  <div class="alert alert-solid-success" role="alert">Your payment went successfully through!</div>
+<% else %>
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <div id="checkout-new" class="container mx-auto max-w-md">
+    <%= f = form_for @changeset, "#", phx_submit: "submit" %>
+      <%= hidden_input f, :amount, value: "1099" %>
+      <%= hidden_input f, :currency, value: "USD" %>
+
+      <%= label f, :email, class: "tag-label mb-4" do %>
+        <span>Your Email</span>
+        <%= text_input f, :email, class: "tag-input", placeholder: "Ex. james@bond.com", disabled: !is_nil(@checkout) %>
+        <span class="tag-validation"><%= error_tag f, :email %></span>
+      <% end %>
+      <%= label f, :name, class: "tag-label mb-4" do %>
+        <span>Your Name (same as your credit card)</span>
+        <%= text_input f, :name, class: "tag-input", placeholder: "Ex. James Bond", disabled: !is_nil(@checkout) %>
+        <span class="tag-validation"><%= error_tag f, :name %></span>
+      <% end %>
+
+      <%= if is_nil(@checkout) do %>
+        <button type="submit" class="btn btn-icon btn-primary w-full">
+          <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+          </svg>
+          Go to payment
+        </button>
+      <% end %>
+    </form>
+
+    <%= if @intent do %>
+      <form action="#" method="post" data-secret="<%= @intent.client_secret %>" phx-hook="InitCheckout" id="payment-form">
+        <div class="form-row mb-4">
+          <label for="card-element" class="tag-label">
+            Credit or debit card
+          </label>
+          <div id="card-element" class="tag-input">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+
+          <!-- Used to display form errors. -->
+          <div id="card-errors" class="tag-label" role="alert"></div>
+        </div>
+
+        <button class="btn btn-primary w-full">Submit Payment</button>
+      </form>
+    <% end %>
+  </div>
+<% end %>

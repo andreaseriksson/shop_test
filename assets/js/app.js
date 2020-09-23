@@ -17,9 +17,11 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import {InitToast} from "./init_toast.js"
+import {InitCheckout} from "./init_checkout"
 
 let Hooks = {}
 Hooks.InitToast = InitToast
+Hooks.InitCheckout = InitCheckout
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

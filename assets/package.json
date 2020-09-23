@@ -7,6 +7,7 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^1.9.0",
     "alpinejs": "^2.6.0",
     "kutty": "^0.2.3",
     "nprogress": "^0.2.0",

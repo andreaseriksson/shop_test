@@ -39,6 +39,7 @@ defmodule ShopTest.MixProject do
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:inflex, "~> 2.0.0"},
       {:faker, "~> 0.14"},
+      {:stripity_stripe, "~> 2.0"},
 
       {:phoenix, "~> 1.5.4"},
       {:phoenix_ecto, "~> 4.1"},
