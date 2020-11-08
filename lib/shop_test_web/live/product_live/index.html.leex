@@ -1,7 +1,7 @@
 <div class="flex flex-wrap">
   <div class="w-full md:w-2/3">
-    <div class="card shadow">
-      <div class="card-header md:flex justify-between">
+    <div class="shadow card">
+      <div class="justify-between card-header md:flex">
         <h5 class="card-title">
           Listing Products
         </h5>
@@ -14,10 +14,13 @@
           <% end %>
         </form>
       </div>
-      <div class="card-body prose max-w-full">
+      <div class="max-w-full card-body prose">
         <table class="table">
           <thead>
             <tr>
+              <th>
+                <input type="checkbox" name="toggle-all" id="toggle-all" phx-click="toggle-all" phx-update="ignore" />
+              </th>
               <th>Name</th>
               <th>Description</th>
               <th>Price</th>
@@ -31,30 +34,57 @@
               </th>
             </tr>
           </thead>
-          <tbody id="products">
-<%= for product <- @products do %>
-            <tr id="product-<%= product.id %>">
-              <td>
-                <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
-                  <%= product.name %>
-                <% end %>
-              </td>
-              <td>
-                <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
-                  <%= product.description %>
-                <% end %>
-              </td>
-              <td><%= product.price %></td>
 
-              <td class="text-right">
-                <button type="button" class="btn btn-link btn-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </button>
+          <tfoot>
+            <tr>
+              <td colspan="5">
+                <div class="flex items-center">
+                  <div class="flex-initial">
+                    <button type="button" class="btn btn-link btn-sm" phx-click="delete">Delete checked</button>
+                  </div>
+                  <div class="ml-4">
+                    <%= f = form_for @price_changeset, "#", phx_change: "bulk-action", as: "product" %>
+                      <%= text_input f, :price, class: "tag-input tag-input-sm", phx_debounce: 500, placeholder: "Price" %>
+                    </form>
+                  </div>
+                  <div class="ml-4">
+                    <button class="btn btn-sm btn-light" phx-click="bulk-trigger">Update checked</button>
+                  </div>
+                </div>
               </td>
             </tr>
-<% end %>
+          </tfoot>
+
+          <tbody id="products">
+            <%= for product <- @products do %>
+              <% checked = if (product.id in @toggle_ids), do: "checked", else: "" %>
+
+              <tr id="product-<%= product.id %>">
+                <td>
+                  <input type="checkbox" name="toggle"
+                    phx-click="toggle" phx-value-toggle-id="<%= product.id %>" <%= checked %> />
+                </td>
+                <td>
+                  <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
+                    <%= product.name %>
+                  <% end %>
+                </td>
+                <td>
+                  <%= live_redirect to: Routes.product_show_path(@socket, :show, product.slug) do %>
+                    <%= product.description %>
+                  <% end %>
+                </td>
+                <td><%= product.price %></td>
+
+                <td class="text-right">
+                  <button type="button" class="btn btn-link btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            <% end %>
           </tbody>
         </table>
       </div>
